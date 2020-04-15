@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://thymeleaf.org/"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/"
+	layout:decorator="layout">
+	<th:block layout:fragment="content">
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<h4>Perfis</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<a href="/roles/new" class="btn btn-success pull-right">Novo</a>
+		</div>
+		<div class="col-md-12 col-xs-12">
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Perfil</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="role : ${roles}">
+					<td th:text="${role.id}"></td>
+					<td th:text="${role.name}"></td>
+					<td>
+						<form th:action="@{/roles/{id}(id = ${role.id})}" th:method="post">
+							<button class="btn btn-danger">
+							Excluir
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		</div>
+	</div>
+		
+	
+	</th:block>
+</html>

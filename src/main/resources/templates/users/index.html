@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://thymeleaf.org/"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/"
+	layout:decorator="layout">
+	<th:block layout:fragment="content">
+	
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<a href="/users/new" class="btn btn-success pull-right">Novo</a>
+		</div>
+		
+		<div class="col-md-12 col-xs-12">
+			<h5 class="mt-4 mb-4">Usuários</h5>
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+					<th>Email</th>
+					<th>Ativo</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="registro : ${registros}">
+					<td th:text="${registro.id}"></td>
+					<td th:text="${registro.name}"></td>
+					<td th:text="${registro.email}"></td>
+					<td th:switch="${registro.active}">
+						<span th:case="${true}" class="badge badge-success" >SIM</span>
+						<span th:case="${false}" class="badge badge-danger">NAO</span>
+					</td>
+					<td>
+						
+						<form th:action="@{/users/{id}(id = ${registro.id})}" th:method="post">
+						<a th:href="@{/users/edit/{id}(id = ${registro.id})}" class="btn btn-info">Editar</a>
+							<button type="submit" class="btn btn-danger">
+							Excluir
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		</div>
+	</div>
+		
+	
+	</th:block>
+</html>

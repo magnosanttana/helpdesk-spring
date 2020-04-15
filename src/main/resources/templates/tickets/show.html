@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://thymeleaf.org/"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/"
+	layout:decorator="layout"
+	xmlns:sec="http://thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+	<th:block layout:fragment="content">
+		<div class="col-xs-12 col-md-12">
+			
+			<div class="card">
+				<div class="card-header">
+					#<span th:text="${ticket.id}"></span> - <span th:text="${ticket.name}"></span>
+				</div>
+				<div class="card-block">
+					<ul>
+						<li>
+							<span th:text="${ticket.description}"></span>				
+						</li>
+						<li>
+							Fechado?
+							<div class="inline" th:switch="${ticket.finished}">
+								<span th:case="${true}" class="badge badge-success" >SIM</span>
+								<span th:case="${false}" class="badge badge-warning">NAO</span>
+							</div>
+						</li>
+					</ul>
+				</div>	
+			</div><br/>
+			
+			
+			<div class="col-xs-12 col-md-12">
+				<hr />
+				<h3>Nova Interação</h3>
+				<form action="" th:action="@{/tickets/{ticketId}/interactions(ticketId = ${ticket.id})}" th:object="${interaction}" th:method="post">
+					<div class="form-group">
+						<input type="text" disabled="disabled" class="form-control" th:value="${#authentication.name}"/>
+					</div>	
+					<div class="form-group">
+						<textarea th:field="*{text}" name="text" placeholder="Insira sua reposta" class="form-control" th:disabled="${ticket.finished}"  ></textarea>
+						<span class="text-danger" th:if="${#fields.hasErrors('text')}" th:errors="text">Ticket solicitação error</span>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-success" th:disabled="${ticket.finished}">Salvar</button>
+							
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-xs-12 col-md-12">
+				<hr />
+				<h3>Interações passadas</h3>
+				<hr />
+			</div>
+			
+			<div class="col-xs-12 col-md-12" th:each="interact : ${interactions}">
+				<div class="col-xs-10 col-md-10">
+					<strong th:text="${#dates.format(interact.created, 'dd/MM/yyyy - HH:mm')}"></strong><br/>
+					<strong th:text="'['+ ${interact.userInteraction.email} + ']'"></strong>
+					<strong th:text="'comentou:'"></strong>
+					
+					<p>
+						<em th:text="${interact.text}"></em>
+					</p>
+				</div>
+				<!-- <div class="col-xs-2 col-md-2" th:switch="${userLoggedIn.roles[0].name}">
+					<form th:case="ADMIN" action="" th:action="@{/tickets/{ticketId}/interactions/delete/{id}(ticketId = ${ticket.id}, id = ${interact.id})}" th:method="delete">
+						<button type="submit" class="btn btn-danger">Excluir admin</button>
+					</form>
+					<form th:case="USER" th:if="${userLoggedIn.id == ticket.userOpen.id}" action="" th:action="@{/tickets/{ticketId}/interactions/{id}(ticketId = ${ticket.id}, id = ${interact.id})}" th:method="delete">
+						<button type="submit" class="btn btn-danger">Excluir Autor</button>
+					</form>
+				</div>-->
+			</div>
+			
+			<p><a th:href="@{/tickets}" class="btn btn-secondary pull-right">Voltar</a></p>
+		</div>
+	</th:block>
+</html>

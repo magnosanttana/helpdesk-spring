@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://thymeleaf.org/"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/"
+	layout:decorator="layout">
+	<th:block layout:fragment="content">
+	<!--   -->
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+			<a href="/tickets/new" class="btn btn-success pull-right">Novo</a>
+		</div>
+		
+		<div class="col-md-12 col-xs-12">
+			<h5 class="mt-4 mb-4">Tickets </h5>
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Assunto</th>
+					<th>Data abertura</th>
+					<th>Fechado</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="registro : ${registros}" th:if="${(userLogged.id == registro.userOpen.id) || userLogged.getRoles()[0].getName() == 'ADMIN' }">
+					<td th:text="${registro.id}"></td>
+					<td th:text="${registro.name}"></td>
+					<td th:text="${#dates.format(registro.created, 'dd/MM/yyyy')}"></td>
+					<td th:switch="${registro.finished}">
+						<span th:case="${true}" class="badge badge-success" >SIM</span>
+						<span th:case="${false}" class="badge badge-warning">NAO</span>
+					</td>
+					<td>
+						<a th:href="@{/tickets/{id}(id = ${registro.id})}" class="btn btn-secondary">Visualizar</a>
+						<a th:href="@{/tickets/edit/{id}(id = ${registro.id})}" class="btn btn-info" >Editar</a>
+						<form th:action="@{/tickets/delete/{id}(id = ${registro.id})}" class="inline" th:method="post" sec:authorize="hasAuthority('ADMIN')">
+							<button type="submit" class="btn btn-danger">
+							Excluir
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		</div>
+	</div>
+		
+	
+	</th:block>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://thymeleaf.org/"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/"
+	layout:decorator="layout">
+
+	<th:block layout:fragment="content">
+		<div class="col-xs-12 col-md-12 text-center">
+			<h4>Editar usuário</h4>
+			<form action="" th:action="@{/users/edit/{id}(id = ${user.id})}" th:object="${user}" th:method="post">
+				<div class="row">
+					<div class="form-group col-md-12 col-xs-12">
+						<input type="text" th:field="*{name}" name="name" placeholder="Digite o nome:" class="form-control" />
+						<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">User name error</span>
+					</div>	
+				</div>
+				<div class="form-group">
+					<input type="email" th:field="*{email}" name="email" placeholder="Digite o email:" class="form-control" />
+					<span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">User email error</span>
+				</div>	
+				<div class="form-group">
+					<input type="password" th:field="*{password}" name="password" placeholder="Digite a senha:" class="form-control" />
+					<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">User password error</span>
+				</div>
+				<div class="form-group">
+					<select th:field="*{roles}" class="custom-select">
+						<option th:each="role : ${roles}"
+						th:value="${role.id}"
+						th:text="${role.name}"
+						th:selected="${role.id == user.roles[0].id}"
+						>
+						</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="custom-control custom-checkbox">
+						<input type="checkbox" th:field="*{active}" class="custom-control-input" />
+						<span class="custom-control-indicator"></span>
+						<span class="custom-control-description">Ativo?</span>
+					</label>
+				</div>	
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">Salvar</button>
+					<a th:href="@{/users}" class="btn btn-secondary">Cancela</a>
+				</div>
+			</form>
+		</div>
+	</th:block>
+</html>
